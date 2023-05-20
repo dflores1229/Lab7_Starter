@@ -57,7 +57,10 @@ self.addEventListener('fetch', function (event) {
     event.respondWith(
       fetch(event.request).then((fetchedResponse) => {
         caches.open(CACHE_NAME).then((cache) => {
-          cache.put(event.request);
+          caches.put(event.request, fetchedResponse.clone());
+        });
+
+        return fetchedResponse;
       }).catch(() => {
         // If the network is unavailable, get
         return cache.match(event.request);
